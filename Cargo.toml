@@ -1,8 +1,8 @@
 [package]
 name = "libsolv"
 version = "0.1.0"
-edition = "2018"
-authors = ["Igor Gnatenko <ignatenko@redhat.com>"]
+edition = "2021"
+authors = ["Igor Gnatenko <ignatenko@redhat.com>", "Cappy Ishihara <cappy@cappuchino.xyz>"]
 
 [workspace]
 members = ["systest"]
@@ -31,10 +31,6 @@ libc = "0.2"
 error-chain = "0.12"
 clap = {version = "2", optional = true}
 
-[[bin]]
-name = "testsolv"
-path = "src/bin/testsolv.rs"
-required-features = ["tools", "ext"]
 
 [[bin]]
 name = "depchase"

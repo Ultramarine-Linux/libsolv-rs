@@ -27,10 +27,10 @@ pub fn read<P: AsRef<Path>>(pool: &PoolContext, path: P, job: &mut Queue) -> Res
         unsafe {testcase_read(borrow._p, fp, testcase.as_ptr(), &mut job._q, &mut resultp, &mut resultflagsp)}
     };
 
-    let resultpString = unsafe {CString::solv_take_mut(&mut resultp)}?;
+    let result_pstring = unsafe {CString::solv_take_mut(&mut resultp)}?;
 
     //TODO: We left off here. Use path, not testcase. Check solver result
-    Ok((Solver::new_with_solver(pool.clone_context(), solver), resultpString, resultflagsp))
+    Ok((Solver::new_with_solver(pool.clone_context(), solver), result_pstring, resultflagsp))
 }
 
 pub fn solverresult(solver: &mut Solver, resultflags: c_int) -> Result<CString> {

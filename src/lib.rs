@@ -18,7 +18,7 @@ pub mod errors {
     }
 }
 
-pub mod chksum;
+pub mod checksum;
 pub mod pool;
 pub mod queue;
 pub mod repo;
@@ -35,7 +35,22 @@ pub mod ext;
 
 #[cfg(test)]
 mod tests {
+    use std::path::{Path};
+    use crate::ext::testcase;
+    use crate::queue::Queue;
+    use crate::pool::{PoolContext};
+
     #[test]
-    fn it_works() {
+    fn test_solv() {
+        // print current path
+        println!("{:?}", std::env::current_dir().unwrap());
+        let path = Path::new("libsolv-source/test/testcases/choose/default.t");
+        let mut job = Queue::new();
+        let pool = PoolContext::new();
+        if let Ok((mut solver, _result, resultflags)) = testcase::read(&pool, path, &mut job) {
+            solver.solve(&mut job);
+            let myresult = testcase::solverresult(&mut solver, resultflags).unwrap();
+            println!("{:?}", myresult);
+        }
     }
 }

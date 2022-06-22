@@ -11,7 +11,7 @@ impl Queue {
     pub fn new() -> Self {
         use libsolv_sys::queue_init;
         let internal = unsafe {
-            let mut internal: _Queue = mem::uninitialized();
+            let mut internal: _Queue = mem::MaybeUninit::uninit().assume_init();
             queue_init(&mut internal);
             internal
         };

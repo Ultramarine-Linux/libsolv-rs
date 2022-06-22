@@ -11,38 +11,38 @@ use std::io::{Cursor, Read, BufReader};
 use std::os::unix::io::*;
 use std::convert::Into;
 
-pub struct Chksum {
+pub struct Checksum {
     _c: *mut _Chksum,
 }
 
-impl Chksum {
-    fn new(id: Id) -> Chksum {
+impl Checksum {
+    fn new(id: Id) -> Checksum {
         use libsolv_sys::solv_chksum_create;
         let _c = unsafe{solv_chksum_create(id)};
         if _c.is_null() {
             panic!("libsolv returned null for solv_chksum_create(Id) with id {}", id);
         } else {
-            Chksum{_c: _c}
+            Checksum{_c: _c}
         }
     }
 
-    pub(crate) unsafe fn new_from(_c: *mut _Chksum) -> Chksum {
+    pub(crate) unsafe fn new_from(_c: *mut _Chksum) -> Checksum {
         if _c.is_null() {
             panic!("libsolv returned null for solv_chksum_create(Id)");
         }
-        Chksum{_c: _c}
+        Checksum{_c: _c}
     }
 
-    pub fn new_md5() -> Chksum {
-        Chksum::new(solv_knownid::REPOKEY_TYPE_MD5 as Id)
+    pub fn new_md5() -> Checksum {
+        Checksum::new(solv_knownid::REPOKEY_TYPE_MD5 as Id)
     }
 
-    pub fn new_sha1() -> Chksum {
-        Chksum::new(solv_knownid::REPOKEY_TYPE_SHA1 as Id)
+    pub fn new_sha1() -> Checksum {
+        Checksum::new(solv_knownid::REPOKEY_TYPE_SHA1 as Id)
     }
 
-    pub fn new_sha256() -> Chksum {
-        Chksum::new(solv_knownid::REPOKEY_TYPE_SHA256 as Id)
+    pub fn new_sha256() -> Checksum {
+        Checksum::new(solv_knownid::REPOKEY_TYPE_SHA256 as Id)
     }
 
     pub fn add<T: AsRef<[u8]>>(&mut self, t: T) {
@@ -66,9 +66,9 @@ impl Chksum {
     pub fn add_fstat(&mut self, file: &File) {
         use libsolv_sys::solv_chksum_add;
         let stb: libc::stat = unsafe {
-            let mut tmp = mem::uninitialized();
+            let mut tmp = mem::MaybeUninit::uninit().assume_init();
             if libc::fstat(file.as_raw_fd(), &mut tmp) == 0 {
-                mem::uninitialized()
+                mem::MaybeUninit::uninit().assume_init()
             } else {
                 tmp
             }
@@ -92,13 +92,13 @@ impl Chksum {
     }
 }
 
-impl Into<Box<[u8]>> for Chksum {
+impl Into<Box<[u8]>> for Checksum {
     fn into(self) -> Box<[u8]> {
         self.into_boxed_slice()
     }
 }
 
-impl Drop for Chksum {
+impl Drop for Checksum {
     fn drop(&mut self) {
         use libsolv_sys::solv_chksum_free;
         unsafe {solv_chksum_free(self._c, ptr::null_mut() as *mut u8)};

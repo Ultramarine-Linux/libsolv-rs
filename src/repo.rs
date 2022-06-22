@@ -7,7 +7,7 @@ use std::iter::Iterator;
 use std::marker::PhantomData;
 use libc;
 use crate::pool::Pool;
-use crate::chksum::Chksum;
+use crate::checksum::Checksum;
 use libsolv_sys::{Repo as _Repo, Dataiterator as _Dataiterator, Datapos as _Datapos};
 use crate::{Id, solv_knownid};
 use std::fmt::Display;
@@ -66,7 +66,7 @@ impl<'a> DataIterator<'a> {
         let pool = repo.ctx.borrow_mut();
 
         let di = unsafe {
-            let mut di = mem::uninitialized();
+            let mut di = mem::MaybeUninit::uninit().assume_init();
             // TODO: handle non-zero returns?
             dataiterator_init(&mut di, pool._p, repo._r, p, key, ptr::null(), 0);
             di
@@ -84,7 +84,7 @@ impl<'a> DataIterator<'a> {
         let what_ptr = what_str.as_ptr();
 
         let di = unsafe {
-            let mut di = mem::uninitialized();
+            let mut di = mem::MaybeUninit::uninit().assume_init();
             // TODO: handle non-zero returns?
             dataiterator_init(&mut di, pool._p, repo._r, p, key, what_str.as_ptr(), flags);
             di
@@ -139,7 +139,7 @@ impl<'a> DataMatch<'a> {
         println!("clone from: {:?}", &di);
         use libsolv_sys::{dataiterator_init_clone, dataiterator_strdup};
         let ndi = unsafe {
-            let mut ndi = mem::uninitialized();
+            let mut ndi = mem::MaybeUninit::uninit().assume_init();
             dataiterator_init_clone(&mut ndi, &mut di);
             dataiterator_strdup(&mut ndi);
             ndi
@@ -221,7 +221,7 @@ impl<'a> DataPos<'a> {
         }
     }
 
-    pub fn lookup_checksum(&mut self, _keyname:Id) -> Option<Chksum> {
+    pub fn lookup_checksum(&mut self, _keyname:Id) -> Option<Checksum> {
         
         println!("Made it into function: {:?}", self);
 

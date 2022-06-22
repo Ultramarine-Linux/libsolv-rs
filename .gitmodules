@@ -1,0 +1,3 @@
+[submodule "libsolv-source"]
+	path = libsolv-source
+	url = https://github.com/openSUSE/libsolv.git

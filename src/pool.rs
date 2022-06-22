@@ -61,7 +61,7 @@ impl Pool {
 
     }
 
-    pub fn set_arch(&mut self, arch: &str) { ;
+    pub fn set_arch(&mut self, arch: &str) {
         use libsolv_sys::pool_setarch;
         let string = CString::new(arch).unwrap();
         unsafe {pool_setarch(self._p, string.as_ptr())};

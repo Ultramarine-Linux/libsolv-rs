@@ -16,7 +16,7 @@ use std::fs::File;
 
 
 use std::io::{Read};
-use libsolv::chksum::Chksum;
+use libsolv::checksum::Checksum;
 use libsolv::ext::solvfile::*;
 use libsolv::ext::rpmmd::*;
 
@@ -87,14 +87,14 @@ impl BaseRepo {
     }
 
     fn calc_cookie<R: Read>(r: &mut R) -> Box<[u8]> {
-        let mut chksum = Chksum::new_sha256();
+        let mut chksum = Checksum::new_sha256();
         chksum.add("1.1");
         chksum.read_in(r);
         chksum.into_boxed_slice()
     }
 
     fn calc_cookie_ext(cookie: &[u8], file: &File) -> Box<[u8]> {
-        let mut chksum = Chksum::new_sha256();
+        let mut chksum = Checksum::new_sha256();
         chksum.add("1.1");
         chksum.add(cookie);
         chksum.add_fstat(file);
