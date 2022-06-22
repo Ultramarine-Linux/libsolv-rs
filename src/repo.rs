@@ -47,7 +47,7 @@ impl Repo {
 impl Drop for Repo {
     fn drop(&mut self) {
         use libsolv_sys::repo_free;
-        let borrow = self.ctx.borrow_mut();
+        let _borrow = self.ctx.borrow_mut();
         unsafe{repo_free(self._r, 0)}
     }
 }
@@ -62,7 +62,7 @@ pub struct DataIterator<'a> {
 impl<'a> DataIterator<'a> {
 
     fn new(repo: &mut Repo, p: Id, key: Id) -> DataIterator {
-        use libsolv_sys::{solv_calloc, dataiterator_init};
+        use libsolv_sys::{dataiterator_init};
         let pool = repo.ctx.borrow_mut();
 
         let di = unsafe {
@@ -76,7 +76,7 @@ impl<'a> DataIterator<'a> {
     }
 
     fn new_with_string<T: AsRef<str>>(repo: &mut Repo, p: Id, key: Id, what: T, flags: libc::c_int) -> DataIterator {
-        use libsolv_sys::{solv_calloc, dataiterator_init};
+        use libsolv_sys::{dataiterator_init};
         let pool = repo.ctx.borrow_mut();
         let what_str = CString::new(what.as_ref())
             .expect(&format!("Unable to create CString from {:?}", what.as_ref()));
@@ -106,7 +106,7 @@ impl<'a> DataIterator<'a> {
 
 impl<'a> Drop for DataIterator<'a> {
     fn drop(&mut self) {
-        use libsolv_sys::{dataiterator_free, solv_free};
+        use libsolv_sys::{dataiterator_free};
         unsafe {
             dataiterator_free(&mut self._di);
         }
@@ -190,7 +190,7 @@ impl<'a> Display for DataMatch<'a> {
 impl<'a> Drop for DataMatch<'a> {
 
     fn drop(&mut self) {
-        use libsolv_sys::{dataiterator_free, solv_free};
+        use libsolv_sys::{dataiterator_free};
         unsafe {
             dataiterator_free(&mut self._ndi);
         }
@@ -221,11 +221,11 @@ impl<'a> DataPos<'a> {
         }
     }
 
-    pub fn lookup_checksum(&mut self, keyname:Id) -> Option<Chksum> {
-        use libsolv_sys::{SOLVID_POS, pool_lookup_bin_checksum, solv_chksum_create_from_bin};
+    pub fn lookup_checksum(&mut self, _keyname:Id) -> Option<Chksum> {
+        
         println!("Made it into function: {:?}", self);
 
-        let repo = unsafe{&mut *self._dp.repo};
+        let _repo = unsafe{&mut *self._dp.repo};
         //ERROR: Incorrect state encountered when uncommenting the next line.
         //println!("repo : {:?}", repo.pool);
 

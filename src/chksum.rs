@@ -7,7 +7,7 @@ use libsolv_sys::solv_knownid;
 use std::slice;
 use libc;
 use std::fs::File;
-use std::io::{Cursor, Seek, SeekFrom, Read, BufReader};
+use std::io::{Cursor, Read, BufReader};
 use std::os::unix::io::*;
 use std::convert::Into;
 

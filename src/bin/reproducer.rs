@@ -1,7 +1,7 @@
-extern crate libc;
-extern crate libsolv;
-extern crate libsolv_sys;
-extern crate libsolvext_sys;
+use libc;
+
+
+
 
 use std::ffi::{CStr, CString};
 use std::fs::File;
@@ -10,7 +10,7 @@ use std::ptr;
 use std::mem;
 use std::slice;
 use std::path::{Path, PathBuf};
-use libsolv::chksum::Chksum;
+
 use std::cell::{RefCell, Ref, RefMut};
 use std::rc::Rc;
 
@@ -19,7 +19,7 @@ use libc::FILE;
 use libsolv_sys::{s_Pool, Pool, Dataiterator};
 use libsolv_sys::{pool_create, pool_setdebuglevel, pool_setloadcallback};
 use libsolv_sys::pool_free;
-use libsolv_sys::pool_setarch;
+
 use libsolvext_sys::solv_xfopen_fd;
 use libsolv_sys::Repo;
 use libsolv_sys::s_Chksum;
@@ -46,17 +46,17 @@ use libsolv_sys::solv_chksum_get;
 use libsolv_sys::repodata_add_flexarray;
 use libsolv_sys::repodata_internalize;
 use libsolv_sys::repodata_add_idarray;
-use libsolv_sys::repodata_create_stubs;
+
 use libsolv_sys::pool_addfileprovides_queue;
 use libsolv_sys::queue_init;
 use libsolv_sys::Queue;
 use libsolv_sys::{s_Repodata, Repodata};
 use libsolv_sys::pool_createwhatprovides;
 use libsolv_sys::queue_free;
-use libsolv_sys::solver_create;
-use libsolv_sys::solver_free;
+
+
 use libsolv_sys::solv_chksum_free;
-use libsolv_sys::REPODATA_STUB;
+
 
 pub type LoadCallback = Option<Box<dyn Fn(s_Repodata)>>;
 
@@ -216,7 +216,7 @@ impl RepoHandle {
 
 impl Drop for RepoHandle {
     fn drop(&mut self) {
-        let borrow = self.pool_rc.borrow_mut();
+        let _borrow = self.pool_rc.borrow_mut();
         unsafe{repo_free(self.repo, 0)};
     }
 }
@@ -446,7 +446,7 @@ fn find(repo: &RepoHandle, what: &str) -> (Option<CString>, Option<*mut s_Chksum
 }
 
 
-fn updateaddedprovides(pool: &mut PoolHandle, repo: &mut RepoHandle, addwhatprovies: &mut Queue) {
+fn updateaddedprovides(_pool: &mut PoolHandle, repo: &mut RepoHandle, _addwhatprovies: &mut Queue) {
     let repo_ref: &mut Repo = unsafe {&mut *repo.as_ptr()};
     let _pool: &mut s_Pool = unsafe{&mut *repo_ref.pool};
     if repo_ref.nsolvables == 0 {

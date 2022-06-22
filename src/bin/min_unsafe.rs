@@ -1,6 +1,6 @@
-extern crate libc;
-extern crate libsolv_sys;
-extern crate libsolvext_sys;
+use libc;
+
+
 
 use std::ffi::{CStr, CString};
 use std::ptr;

@@ -22,7 +22,7 @@ impl Transaction {
 impl Drop for Transaction {
     fn drop(&mut self) {
         use libsolv_sys::transaction_free;
-        let borrow = self.ctx.borrow_mut();
+        let _borrow = self.ctx.borrow_mut();
         unsafe{transaction_free(self._t)}
     }
 }

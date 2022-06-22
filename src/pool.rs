@@ -5,7 +5,7 @@ use crate::solver::Solver;
 use crate::repo::{Repo, RepoDataRef};
 use std::ffi::CString;
 use crate::transaction::Transaction;
-use std::marker::PhantomData;
+
 use std::ptr;
 use std::mem;
 use libc;

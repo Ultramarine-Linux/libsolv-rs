@@ -26,7 +26,7 @@ impl Solver {
 
     pub fn solve(&mut self, job: &mut Queue) -> libc::c_int {
         use libsolv_sys::solver_solve;
-        let borrow = self.ctx.borrow_mut();
+        let _borrow = self.ctx.borrow_mut();
         unsafe{solver_solve(self._s, &mut job._q)}
     }
 
@@ -35,7 +35,7 @@ impl Solver {
 impl Drop for Solver {
     fn drop(&mut self) {
         use libsolv_sys::solver_free;
-        let borrow = self.ctx.borrow_mut();
+        let _borrow = self.ctx.borrow_mut();
         unsafe{solver_free(self._s)}
     }
 }

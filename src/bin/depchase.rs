@@ -1,25 +1,25 @@
 
-extern crate libc;
-extern crate libsolv;
+
+use libsolv;
 
 #[macro_use]
 extern crate clap;
 
-use std::rc::Rc;
-use std::cell::{RefCell, Ref, RefMut};
+
+
 use std::collections::HashMap;
-use clap::App;
+
 use libsolv::pool::PoolContext;
-use libsolv::repo::{Repo, SEARCH_STRING, SOLVID_META};
+use libsolv::repo::{SOLVID_META};
 use std::path::{Path, PathBuf};
 use std::fs::File;
-use std::ffi::CString;
-use std::ptr;
-use std::io::{Cursor, Read};
+
+
+use std::io::{Read};
 use libsolv::chksum::Chksum;
 use libsolv::ext::solvfile::*;
 use libsolv::ext::rpmmd::*;
-use libsolv::sys::{s_Pool, s_Repodata, s_Repo};
+
 use libsolv::errors::*;
 use libsolv::{solv_knownid, Id};
 
@@ -39,7 +39,7 @@ impl BaseRepo {
 
         //REPRODUCER EDIT
 
-        let mut repomd_path = Path::new("./reproducer_files/repomd.xml");
+        let repomd_path = Path::new("./reproducer_files/repomd.xml");
 
         // Analyze the repomd.xml
         let mut repomd = SolvFile::open(&repomd_path)?;
@@ -73,7 +73,7 @@ impl BaseRepo {
             println!("Looking up parent pos");
             let mut dp = d.parent_pos();
             println!("DP after return: {:?}", dp);
-            let chksum = dp.lookup_checksum(solv_knownid::REPOSITORY_REPOMD_CHECKSUM as Id);
+            let _chksum = dp.lookup_checksum(solv_knownid::REPOSITORY_REPOMD_CHECKSUM as Id);
                         //println!("Looked up checksum");
             /*
                 let filename = dp.lookup_str(solv_knownid::REPOSITORY_REPOMD_LOCATION as Id);
@@ -143,7 +143,7 @@ impl SourceRepo {
 
 
 // Skip reading config for now.
-fn setup_repos(arch: &str, conf_file: &str, pool_context: &PoolContext) -> Result<Vec<OsRepo>> {
+fn setup_repos(arch: &str, _conf_file: &str, pool_context: &PoolContext) -> Result<Vec<OsRepo>> {
 
     // Can't handle ~/ ?
     let base_dir = "/Users/abaxter/Projects/fedora-modularity/depchase/repos";
@@ -159,7 +159,7 @@ fn setup_repos(arch: &str, conf_file: &str, pool_context: &PoolContext) -> Resul
     {
         let mut pool = pool_context.borrow_mut();
         pool.set_arch(arch);
-        pool.set_loadcallback(|d| println!("Callback working!"));
+        pool.set_loadcallback(|_d| println!("Callback working!"));
     }
 
     println!("{:?}", &m);
@@ -203,8 +203,8 @@ fn main() {
     let config = matches.value_of("CONFIG").unwrap();
 
     if let Some(resolve) = matches.subcommand_matches("resolve") {
-        let mut pool_context = PoolContext::new();
-        let mut repos = setup_repos(&arch, &config, &pool_context);
+        let pool_context = PoolContext::new();
+        let _repos = setup_repos(&arch, &config, &pool_context);
         for value in resolve.values_of("PACKAGE").unwrap() {
             println!("Package: {}", value);
         }

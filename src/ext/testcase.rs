@@ -1,7 +1,7 @@
 use std::path::Path;
 use crate::solver::Solver;
 use libsolv_sys::Solver as _Solver;
-use libsolv_sys::solv_free;
+
 use crate::pool::PoolContext;
 use crate::queue::Queue;
 use std::ptr;

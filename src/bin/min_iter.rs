@@ -1,6 +1,6 @@
-extern crate libc;
-extern crate libsolv_sys;
-extern crate libsolvext_sys;
+use libc;
+
+
 
 use std::ffi::{CStr, CString};
 use std::ptr;
@@ -35,7 +35,7 @@ struct RepoDataIterator {
 
 impl RepoDataIterator {
     fn new(pool: *mut Pool, repo: *mut Repo, what: &CStr) -> RepoDataIterator {
-        let mut di = unsafe {
+        let di = unsafe {
             let mut di = Box::new(mem::zeroed());
             dataiterator_init(&mut *di, pool, repo,
                               SOLVID_META as Id, solv_knownid::REPOSITORY_REPOMD_TYPE as Id, what.as_ptr(), SEARCH_STRING as Id);
