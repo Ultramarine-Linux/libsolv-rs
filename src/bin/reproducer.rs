@@ -58,7 +58,7 @@ use libsolv_sys::solver_free;
 use libsolv_sys::solv_chksum_free;
 use libsolv_sys::REPODATA_STUB;
 
-pub type LoadCallback = Option<Box<Fn(s_Repodata)>>;
+pub type LoadCallback = Option<Box<dyn Fn(s_Repodata)>>;
 
 pub struct PoolContext {
     pool_rc: Rc<RefCell<PoolHandle>>,

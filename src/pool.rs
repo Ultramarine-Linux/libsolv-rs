@@ -45,7 +45,7 @@ impl PoolContext {
 
 }
 
-pub type LoadCallback = Option<Box<Fn(RepoDataRef)>>;
+pub type LoadCallback = Option<Box<dyn Fn(RepoDataRef)>>;
 
 pub struct Pool {
     pub _p: *mut PoolT,
